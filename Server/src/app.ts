@@ -6,6 +6,8 @@ import labelRoutes from './routes/label.routes';
 import authRoutes from './routes/auth.routes';
 import commentRoutes from './routes/comment.routes';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './config/swagger';
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ app.use('/issues', issueRoutes);
 app.use('/labels', labelRoutes);
 app.use('/auth', authRoutes);
 app.use('/', commentRoutes);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const PORT = process.env.PORT || 7000;
 
