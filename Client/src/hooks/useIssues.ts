@@ -67,8 +67,10 @@ export const useUpdateIssue = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateIssueData }) =>
       updateIssue(id, data),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      const { id } = variables;
       queryClient.invalidateQueries({ queryKey: ["issues"] });
+      queryClient.invalidateQueries({ queryKey: ["issue", id] });
     },
   });
 };
