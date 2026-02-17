@@ -17,17 +17,23 @@ RUN npm run build
 # ---------- Stage 2: Serve with Nginx ----------
 FROM nginx:alpine
 
+# 🔴 CHANGE 1: make nginx listen on 8080 instead of 80
+RUN sed -i 's/listen       80;/listen       8080;/' /etc/nginx/conf.d/default.conf
+
 # Remove default nginx static files
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy built frontend from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Expose port 80 (nginx default)
-EXPOSE 80
+# 🔴 CHANGE 2: Cloud Run expects PORT env variable
+ENV PORT=8080
+
+# Expose port 8080
+EXPOSE 8080
 
 # Healthcheck: verify index.html is served
 HEALTHCHECK --interval=30s --timeout=3s \
-  CMD wget --spider -q http://localhost:80 || exit 1
+  CMD wget --spider -q http://localhost:8080 || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
