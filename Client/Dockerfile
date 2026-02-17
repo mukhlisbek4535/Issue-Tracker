@@ -17,8 +17,6 @@ RUN npm run build
 # ---------- Stage 2: Serve with Nginx ----------
 FROM nginx:alpine
 
-# 🔴 CHANGE 1: make nginx listen on 8080 instead of 80
-RUN sed -i 's/listen       80;/listen       8080;/' /etc/nginx/conf.d/default.conf
 
 # Remove default nginx static files
 RUN rm -rf /usr/share/nginx/html/*
